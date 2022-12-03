@@ -49,14 +49,14 @@ def generate_harmonic_oscillator(n=500, delta_t=.1):
     return train, test
 
 
-def plot_phase_portrait(data, n_trajectories):
+def plot_phase_portrait(data, n_trajectories, fname='phase_portrait_'):
     for i in range(n_trajectories):
         plt.plot(data[i, :, 0], data[i, :, 1])
         # U = x(t) - x(t-1) for any t.
         # V = v(t) - v(t-1) for any t.
         U = torch.cat((data[i, 1:, 0] - data[i, :-1, 0], data[i, 0, 0] - data[i, -1, 0][None]))
         V = torch.cat((data[i, 1:, 1] - data[i, :-1, 1], data[i, 0, 1] - data[i, -1, 1][None]))
-        plt.quiver(data[i, :, 0], data[i, :, 1], U, V)
-    plt.savefig(f'./results/phase_portrait_{n_trajectories}.pdf', transparent=True, bbox_inches='tight', pad_inches=0,
+        plt.quiver(data[i, :-1, 0], data[i, :-1, 1], U[:-1], V[:-1], width=0.0035)
+    plt.savefig(f'./results/{fname}{n_trajectories}.pdf', transparent=True, bbox_inches='tight', pad_inches=0,
                 dpi=300)
     plt.show()

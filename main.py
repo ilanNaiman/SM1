@@ -27,7 +27,7 @@ opt.device = set_seed_device(opt.seed)
 
 # -------------- generate train and test set --------------
 train_set, test_set = generate_harmonic_oscillator(delta_t=.33)
-# plot_phase_portrait(test_set)
+# plot_phase_portrait(test_set, 20, fname='test_set_portrait_delta_t_1')
 
 train_dataset = Data.TensorDataset(train_set[:, :-1], train_set[:, 1:])  # input, labels
 test_dataset = Data.TensorDataset(test_set[:, :-1], test_set[:, 1:])  # input, labels
@@ -72,11 +72,15 @@ for epoch in tqdm(range(opt.nEpoch)):
 plt.plot(range(len(total_tr_losses)), total_tr_losses, label='train')
 plt.plot(range(len(total_te_losses)), total_te_losses, label='test')
 plt.legend()
+plt.yscale("log")
+plt.title("Train and Test Loss During Training")
+plt.savefig(f'./results/train_net.pdf', transparent=True, bbox_inches='tight', pad_inches=0,
+            dpi=300)
 plt.show()
-
-
+#
+#
 # -------------- plot inference of trajectories --------------
-n_trajectories = 5
+n_trajectories = 10000
 
 
 def inference(x_0, v_0=torch.zeros(1)):
